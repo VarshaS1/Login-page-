@@ -4,15 +4,20 @@ import { Button, FormGroup, FormControl, FormLabel } from "react-bootstrap";
 import "./login.css";
 
 
+
 class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       username: '',
-      password: ''
+      password: '',
+      token: ''
     };
     this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
+
+
   handleChange(event) {
     console.log(event.target)
     const { name, value } = event.target
@@ -23,7 +28,16 @@ class Login extends React.Component {
 
   }
 
-
+  componentDidMount() {
+    fetch(
+      'http://localhost:3000/jwt'
+    )
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        this.setState({ token: data.token })
+      })
+  }
   validation() {
     let fields = this.state.fields;
     let errors = {};
@@ -62,10 +76,20 @@ class Login extends React.Component {
   }
 
   handleSubmit(event) {
+
     //alert('A name was submitted');
     event.preventDefault();
+    fetch(
+      'http://localhost:3000/secret', { headers: { 'Authorization': 'Bearer ' + this.state.token } }
+    )
+      .then(response => response.json())
+      .then(data => {
+        if (data.code === 200)
+          alert("Login Successful")
+        else if (data.error)
+          alert(data.error)
+      }).catch(err => { alert("Authorization error") });
   }
-
   render() {
     const { username, password } = this.state;
     const isEnabled = username.trim().length > 0 && password.length > 0;
