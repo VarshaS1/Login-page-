@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import React from "react";
 import { Button, FormGroup, FormControl, FormLabel } from "react-bootstrap";
 import "./login.css";
@@ -58,7 +57,7 @@ class Login extends React.Component {
     }
 
 
-    if (!fields["password"]) {
+    /*if (!fields["password"]) {
       formIsValid = false;
       errors["password"] = "*Please enter your password.";
     }
@@ -68,7 +67,7 @@ class Login extends React.Component {
         formIsValid = false;
         errors["password"] = "*Please enter secure and strong password.";
       }
-    }
+    }*/
     this.setState({
       errors: errors
     });
