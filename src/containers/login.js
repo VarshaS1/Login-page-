@@ -1,9 +1,8 @@
-/* eslint-disable no-dupe-class-members */
-/* eslint-disable react/jsx-no-undef */
+
 import React from "react";
 import { Button, FormGroup, FormControl, FormLabel } from "react-bootstrap";
 import "./login.css";
-import Cargoform from './cargoform';
+
 
 
 
@@ -29,13 +28,7 @@ class Login extends React.Component {
     //this.setState({value: event.target.value});
 
   }
-  render() {
-    return (
-      <Cargoform>
-        <h1>Welcome</h1>
-      </Cargoform>
-    )
-  }
+
 
   componentDidMount() {
     fetch(
@@ -97,7 +90,7 @@ class Login extends React.Component {
         else if (data.error)
           alert(data.error)
       }).catch(err => { alert("Authorization error") });
-    return (<Cargoform></Cargoform>)
+
   }
   render() {
     const { username, password } = this.state;
