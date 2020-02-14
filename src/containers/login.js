@@ -16,8 +16,7 @@ class Login extends React.Component {
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.props.navigation.navigate('cargoform');
-  }
+    }
 
   handleChange(event) {
     console.log(event.target)
