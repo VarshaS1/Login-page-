@@ -1,6 +1,9 @@
+/* eslint-disable no-dupe-class-members */
+/* eslint-disable react/jsx-no-undef */
 import React from "react";
 import { Button, FormGroup, FormControl, FormLabel } from "react-bootstrap";
 import "./login.css";
+import Cargoform from './cargoform';
 
 
 
@@ -14,8 +17,8 @@ class Login extends React.Component {
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.props.navigation.navigate('cargoform');
   }
-
 
   handleChange(event) {
     console.log(event.target)
@@ -25,6 +28,13 @@ class Login extends React.Component {
     //this.setState({value: event.target.value});
     //this.setState({value: event.target.value});
 
+  }
+  render() {
+    return (
+      <Cargoform>
+        <h1>Welcome</h1>
+      </Cargoform>
+    )
   }
 
   componentDidMount() {
@@ -40,7 +50,6 @@ class Login extends React.Component {
   validation() {
     let fields = this.state.fields;
     let errors = {};
-    // eslint-disable-next-line no-unused-vars
     let formIsValid = true;
 
     //username
@@ -83,11 +92,12 @@ class Login extends React.Component {
     )
       .then(response => response.json())
       .then(data => {
-        if (data.code === 200)
+        if (data.code === 200 || data.code === 204)
           alert("Login Successful")
         else if (data.error)
           alert(data.error)
       }).catch(err => { alert("Authorization error") });
+    return (<Cargoform></Cargoform>)
   }
   render() {
     const { username, password } = this.state;
@@ -112,10 +122,12 @@ class Login extends React.Component {
               onChange={this.handleChange}
               type="password"
             />
+
           </FormGroup>
           <Button type="submit" disabled={!isEnabled}>
             Login
           </Button>
+
         </form>
       </div>
     );
