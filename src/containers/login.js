@@ -84,7 +84,7 @@ class Login extends React.Component {
     )
       .then(response => response.json())
       .then(data => {
-        if (data.code === 200 || data.code === 204)
+        if (data.code === 200)
           alert("Login Successful")
         else if (data.error)
           alert(data.error)

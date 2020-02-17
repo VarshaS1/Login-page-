@@ -25,7 +25,7 @@ class RegisterForm extends React.Component {
 
     }
 
-    submituserRegistrationForm(e) {
+    submituserRegistrationForm=(e)=> {
         e.preventDefault();
         let field = this.state.fields;
 
@@ -118,12 +118,7 @@ class RegisterForm extends React.Component {
             errors: errors
         });
         return formIsValid;
-
-
     }
-
-
-
     render() {
         return (
             <div id="main-registration-container">
@@ -146,12 +141,8 @@ class RegisterForm extends React.Component {
                     </form>
                 </div>
             </div>
-
         );
     }
-
-
 }
-
-
 export default RegisterForm;
+
