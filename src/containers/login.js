@@ -4,8 +4,6 @@ import { Button, FormGroup, FormControl, FormLabel } from "react-bootstrap";
 import "./login.css";
 
 
-
-
 class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -14,11 +12,11 @@ class Login extends React.Component {
       password: '',
       token: ''
     };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    }
+    // this.handleChange = this.handleChange.bind(this);
+    // this.handleSubmit = this.handleSubmit.bind(this);
+  }
 
-  handleChange(event) {
+  handleChange=(event)=> {
     console.log(event.target)
     const { name, value } = event.target
     this.setState({ [name]: value });
@@ -75,7 +73,7 @@ class Login extends React.Component {
     return formIsValid;
   }
 
-  handleSubmit(event) {
+  handleSubmit=(event)=> {
 
     //alert('A name was submitted');
     event.preventDefault();

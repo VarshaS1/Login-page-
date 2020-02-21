@@ -1,6 +1,9 @@
-import React from 'react';
+import React from "react";
 import './style.css';
-import jquery  from "jquery";
+import axios from 'axios';
+import jquery from "jquery";
+import Input from './input';
+
 
 
 class RegisterForm extends React.Component {
@@ -10,22 +13,24 @@ class RegisterForm extends React.Component {
             fields: {},
             errors: {}
         }
-
-        this.handleChange = this.handleChange.bind(this);
-        this.submituserRegistrationForm = this.submituserRegistrationForm.bind(this);
-
+        // this.handleChange = this.handleChange.bind(this);
+        //this.submituserRegistrationForm = this.submituserRegistrationForm.bind(this);
     };
-
-    handleChange(e) {
+   
+    
+    handleChange = (e) => {
         let fields = this.state.fields;
+        const char = e.target.value;
+        const isLowerCase = char => char.toLowerCase() === char;
+        const swapCase = char => isLowerCase(char) ? char.toUpperCase() : char.toLowerCase();
         fields[e.target.name] = e.target.value;
+        fields[e.target.name] =swapCase;
         this.setState({
             fields
         });
-
     }
 
-    submituserRegistrationForm=(e)=> {
+    submituserRegistrationForm = (e) => {
         e.preventDefault();
         let field = this.state.fields;
 
@@ -36,29 +41,31 @@ class RegisterForm extends React.Component {
 
         console.log("Outside Form Data" + JSON.stringify(field))
 
-       // alert(this.fields["name"]);
-
-       var data = field;
-
-        jquery.ajax({
-            method: "POST",
-            url: 'http://localhost:8080/api/auth/register',
-            dataType: 'json',
-            data:data,
-            cache: false,
-            success: function(data) {
-              this.setState({fields: data});
-              console.log('success');
-            }.bind(this),
-            error: function(xhr, status, err) {
-              console.error(this.props.url, status, err.toString());
-              console.log(err);
-            }.bind(this)
-          });
-
+        var data = field;
+        // jquery.ajax({
+        //     method: "POST",
+        //     url: 'http://localhost:8080/api/auth/register',
+        //     dataType: 'json',
+        //     data: data,
+        //     cache: false,
+        //     success: function (data) {
+        //         this.setState({ fields: data });
+        //         console.log('success');
+        //         //<Link to="/login"></Link>
+        //     }.bind(this),
+        //     error: function (xhr, status, err) {
+        //         console.error(this.props.url, status, err.toString());
+        //         console.log(err);
+        //     }.bind(this)
+        // });
+        axios
+        .post("http://localhost:8080/api/auth/register")
+        .then(response => console.log(response))
+        .catch(error => this.setState({ error, isLoading: false }));
     }
 
-    validateForm() {
+    validateForm() 
+    {
 
         let fields = this.state.fields;
         let errors = {};
@@ -66,19 +73,19 @@ class RegisterForm extends React.Component {
 
         if (!fields["name"]) {
             formIsValid = false;
-            errors["name"] = "*Please enter your name.";
+            errors["nameerror"] = "*Please enter your name.";
         }
 
         if (typeof fields["name"] !== "undefined") {
             if (!fields["name"].match(/^[a-zA-Z ]*$/)) {
                 formIsValid = false;
-                errors["name"] = "*Please enter alphabet characters only.";
+                errors["nameerror"] = "*Please enter alphabet characters only.";
             }
         }
 
         if (!fields["email"]) {
             formIsValid = false;
-            errors["email"] = "*Please enter your email-ID.";
+            errors["emailerror"] = "*Please enter your email-ID.";
         }
 
         if (typeof fields["email"] !== "undefined") {
@@ -86,25 +93,25 @@ class RegisterForm extends React.Component {
             var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
             if (!pattern.test(fields["email"])) {
                 formIsValid = false;
-                errors["email"] = "*Please enter valid email-ID.";
+                errors["emailerror"] = "*Please enter valid email-ID.";
             }
         }
 
         if (!fields["mobile"]) {
             formIsValid = false;
-            errors["mobile"] = "*Please enter your mobile no.";
+            errors["mobileerror"] = "*Please enter your mobile no.";
         }
 
         if (typeof fields["mobile"] !== "undefined") {
             if (!fields["mobile"].match(/^[0-9]{10}$/)) {
                 formIsValid = false;
-                errors["mobile"] = "*Please enter valid mobile no.";
+                errors["mobileerror"] = "*Please enter valid mobile no.";
             }
         }
 
         if (!fields["password"]) {
             formIsValid = false;
-            errors["password"] = "*Please enter your password.";
+            errors["passworderror"] = "*Please enter your password.";
         }
 
         // if (typeof fields["password"] !== "undefined") {
@@ -119,24 +126,65 @@ class RegisterForm extends React.Component {
         });
         return formIsValid;
     }
-    render() {
+    render()
+     {
+        const { fields: { name, email, mobile, password } } = this.state;
+        const { errors: { nameerror, emailerror, mobileerror, passworderror } } = this.state;
         return (
             <div id="main-registration-container">
                 <div id="register">
                     <h3>Registration page</h3>
                     <form method="post" name="userRegistrationForm" onSubmit={this.submituserRegistrationForm} >
-                        <label>Name</label>
-                        <input type="text" name="name" value={this.state.fields.name} onChange={this.handleChange} />
-                        <div className="errorMsg">{this.state.errors.name}</div>
-                        <label>Email ID:</label>
-                        <input type="text" name="email" value={this.state.fields.email} onChange={this.handleChange} />
-                        <div className="errorMsg">{this.state.errors.email}</div>
-                        <label>Mobile No:</label>
-                        <input type="text" name="mobile" value={this.state.fields.mobile} onChange={this.handleChange} />
-                        <div className="errorMsg">{this.state.errors.mobile}</div>
-                        <label>Password</label>
-                        <input type="password" name="password" value={this.state.fields.password} onChange={this.handleChange} />
-                        <div className="errorMsg">{this.state.errors.password}</div>
+                        <Input
+                            type="text"
+                            title={'Name'}
+                            name="name"
+                            value={name}
+                            handleChange={this.handleChange}
+                            className="errorMsg"
+                            valueerror={nameerror}
+                        />
+
+                        <Input
+                            type="text"
+                            title={'emailID'}
+                            name="email"
+                            value={email}
+                            handleChange={this.handleChange}
+                            className="errorMsg"
+                            valueerror={emailerror}
+                        />
+
+                        <Input
+                            type="text"
+                            title={'Mobile No'}
+                            name="mobile"
+                            value={mobile}
+                            handleChange={this.handleChange}
+                            className="errorMsg"
+                            valueerror={mobileerror}
+
+                        />
+
+                        <Input
+                            type="password"
+                            title={'password'}
+                            name="password"
+                            value={password}
+                            handleChange={this.handleChange}
+                            className="errorMsg"
+                            valueerror={passworderror}
+                        />
+
+
+                        {/* <input type="text" name="email" value={email} onChange={this.handleChange} />
+                        <div className="errorMsg">{emailerror}</div> */}
+
+                        {/* <input type="text" name="mobile" value={mobile} onChange={this.handleChange} />
+                        <div className="errorMsg">{mobileerror}</div> */}
+
+                        {/* <input type="password" name="password" value={password} onChange={this.handleChange} />
+                        <div className="errorMsg">{passworderror}</div> */}
                         <input type="submit" className="button" value="Register" />
                     </form>
                 </div>
