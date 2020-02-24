@@ -1,7 +1,7 @@
+
 import React from "react";
 import { Button, FormGroup, FormControl, FormLabel } from "react-bootstrap";
 import "./login.css";
-
 
 
 class Login extends React.Component {
@@ -12,12 +12,11 @@ class Login extends React.Component {
       password: '',
       token: ''
     };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    // this.handleChange = this.handleChange.bind(this);
+    // this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-
-  handleChange(event) {
+  handleChange=(event)=> {
     console.log(event.target)
     const { name, value } = event.target
     this.setState({ [name]: value });
@@ -26,6 +25,7 @@ class Login extends React.Component {
     //this.setState({value: event.target.value});
 
   }
+
 
   componentDidMount() {
     fetch(
@@ -40,7 +40,6 @@ class Login extends React.Component {
   validation() {
     let fields = this.state.fields;
     let errors = {};
-    // eslint-disable-next-line no-unused-vars
     let formIsValid = true;
 
     //username
@@ -74,7 +73,7 @@ class Login extends React.Component {
     return formIsValid;
   }
 
-  handleSubmit(event) {
+  handleSubmit=(event)=> {
 
     //alert('A name was submitted');
     event.preventDefault();
@@ -88,6 +87,7 @@ class Login extends React.Component {
         else if (data.error)
           alert(data.error)
       }).catch(err => { alert("Authorization error") });
+
   }
   render() {
     const { username, password } = this.state;
@@ -112,10 +112,12 @@ class Login extends React.Component {
               onChange={this.handleChange}
               type="password"
             />
+
           </FormGroup>
           <Button type="submit" disabled={!isEnabled}>
             Login
           </Button>
+
         </form>
       </div>
     );
