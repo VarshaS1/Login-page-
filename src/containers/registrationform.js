@@ -1,7 +1,7 @@
 import React from "react";
 import './style.css';
 import axios from 'axios';
-import jquery from "jquery";
+//import jquery from "jquery";
 import Input from './input';
 
 
@@ -16,15 +16,22 @@ class RegisterForm extends React.Component {
         // this.handleChange = this.handleChange.bind(this);
         //this.submituserRegistrationForm = this.submituserRegistrationForm.bind(this);
     };
-   
-    
+
+    swapcase = (str) => {
+        console.log("string", str);
+        return str.replace(/([a-z]+)|([A-Z]+)/g, function (match, chr) {
+            console.log("match", match)
+            console.log("chr", chr)
+            return chr ? match.toUpperCase() : match.toLowerCase();
+        });
+    }
+
+
     handleChange = (e) => {
-        let fields = this.state.fields;
+        const fields = this.state.fields;
         const char = e.target.value;
-        const isLowerCase = char => char.toLowerCase() === char;
-        const swapCase = char => isLowerCase(char) ? char.toUpperCase() : char.toLowerCase();
-        fields[e.target.name] = e.target.value;
-        fields[e.target.name] =swapCase;
+        // fields[e.target.name] =swapcase;
+        fields[e.target.name] = this.swapcase(e.target.value);
         this.setState({
             fields
         });
@@ -59,13 +66,12 @@ class RegisterForm extends React.Component {
         //     }.bind(this)
         // });
         axios
-        .post("http://localhost:8080/api/auth/register")
-        .then(response => console.log(response))
-        .catch(error => this.setState({ error, isLoading: false }));
+            .post("http://localhost:8080/api/auth/register")
+            .then(response => console.log(response))
+            .catch(error => this.setState({ error, isLoading: false }));
     }
 
-    validateForm() 
-    {
+    validateForm() {
 
         let fields = this.state.fields;
         let errors = {};
@@ -126,8 +132,7 @@ class RegisterForm extends React.Component {
         });
         return formIsValid;
     }
-    render()
-     {
+    render() {
         const { fields: { name, email, mobile, password } } = this.state;
         const { errors: { nameerror, emailerror, mobileerror, passworderror } } = this.state;
         return (
